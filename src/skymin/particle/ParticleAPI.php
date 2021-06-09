@@ -162,4 +162,31 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
+  public function colorcircle(Vector3 $center, float $radius, float $height, float $unit, Level $world, int $r, int $g, int $b){
+    for($i = 0; $i < 360; $i += $unit){
+      for($h = 0; $h < $height; $h += unit){
+        $x = $center->getX();
+        $y = $center->getY();
+        $z = $center->getZ();
+        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $world->addParticle(new DustParticle($vec, $r, $g, $b));
+      }
+    }
+  }
+  
+  public function colorcircle(Vector3 $center, float $radius, float $height, float $unit, Level $world, string $name){
+    for($i = 0; $i < 360; $i += $unit){
+      for($h = 0; $h < $height; $h += unit){
+        $x = $center->getX();
+        $y = $center->getY();
+        $z = $center->getZ();
+        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $pk = new SpawnParticleEffectPacket();
+        $pk->particleName = $name;
+        $pk->position = $vec;
+        $world->broadcastGlobalPacket($pk);
+      }
+    }
+  }
+  
 }
