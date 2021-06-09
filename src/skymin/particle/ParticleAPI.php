@@ -31,7 +31,7 @@ class ParticleAPI extends PluginBase implements Listener{
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
   }
   
-  public function colorcircle(Vector3 $center, float $radius, float $unit, ing $angle, Level $world, int $r, int $g, int $b){
+  public function colorcircle(Vector3 $center, float $radius, float $unit, int $angle, Level $world, int $r, int $g, int $b){
     for($i = 0; $i < 360; $i += $unit){
       $x = $center->getX();
       $y = $center->getY();
