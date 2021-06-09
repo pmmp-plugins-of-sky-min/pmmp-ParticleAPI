@@ -31,22 +31,22 @@ class ParticleAPI extends PluginBase implements Listener{
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
   }
   
-  public function colorcircle(Vector3 $center, float $radius, float $unit, Level $world, int $r, int $g, int $b){
+  public function colorcircle(Vector3 $center, float $radius, float $unit, ing $angle, Level $world, int $r, int $g, int $b){
     for($i = 0; $i < 360; $i += $unit){
       $x = $center->getX();
       $y = $center->getY();
       $z = $center->getZ();
-      $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y, $z + cos(deg2rad($i)) * $radius);
+      $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
       $world->addParticle(new DustParticle($vec, $r, $g, $b));
     }
   }
   
-  public function mccircle(Vector3 $center, float $radius, float $unit, Level $world, string $name){
+  public function mccircle(Vector3 $center, float $radius, float $unit, int $angle, Level $world, string $name){
     for($i = 0; $i < 360; $i += $unit){
       $x = $center->getX();
       $y = $center->getY();
       $z = $center->getZ();
-      $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y, $z + cos(deg2rad($i)) * $radius);
+      $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
@@ -97,8 +97,8 @@ class ParticleAPI extends PluginBase implements Listener{
   
   public function colorregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $level, int $r, int $g, int $b){
     $vec = $center;
-    $angle = 180 * ($side - 2);
-    $r = 180 - ($angle / $side);
+    $ang = 180 * ($side - 2);
+    $r = 180 - ($ang / $side);
     for($i = $rotation; $i <= $rotation + 360; $i += $r){
       $x1 = ($i == $rotation) ? $vec->getX() + $radius * (-\sin ($i / 180 * M_PI)) : $x2;
       $y1 = ($i == $rotation) ? $vec->getY() : $y2;
@@ -116,8 +116,8 @@ class ParticleAPI extends PluginBase implements Listener{
   
   public function mcregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $level, string $name){
     $vec = $center;
-    $angle = 180 * ($side - 2);
-    $r = 180 - ($angle / $side);
+    $ang = 180 * ($side - 2);
+    $r = 180 - ($ang / $side);
     for($i = $rotation; $i <= $rotation + 360; $i += $r){
       $x1 = ($i == $rotation) ? $vec->getX() + $radius * (-\sin ($i / 180 * M_PI)) : $x2;
       $y1 = ($i == $rotation) ? $vec->getY() : $y2;
@@ -162,25 +162,25 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, Level $world, int $r, int $g, int $b){
+  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle, Level $world, int $r, int $g, int $b){
     for($i = 0; $i < 360; $i += $unit){
       for($h = 0; $h < $height; $h += unit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y + $h, $z + cos(deg2rad($i + $angle)) * $radius);
         $world->addParticle(new DustParticle($vec, $r, $g, $b));
       }
     }
   }
   
-  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, Level $world, string $name){
+  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle,Level $world, string $name){
     for($i = 0; $i < 360; $i += $unit){
       for($h = 0; $h < $height; $h += unit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y + $h, $z + cos(deg2rad($i + $angle)) * $radius);
         $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
@@ -190,8 +190,8 @@ class ParticleAPI extends PluginBase implements Listener{
   }
   
   public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b){
-    $angle = 180 * ($count - 2);
-    $r = 180 - ($angle / $count);
+    $ang = 180 * ($count - 2);
+    $r = 180 - ($ang / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
@@ -204,14 +204,44 @@ class ParticleAPI extends PluginBase implements Listener{
   }
   
   public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name){
-    $angle = 180 * ($count - 2);
-    $r = 180 - ($angle / $count);
+    $ang = 180 * ($count - 2);
+    $r = 180 - ($ang / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $pk->particleName = $name;
+        $pk->position = $vec;
+        $world->broadcastGlobalPacket($pk);
+      }
+    }
+  }
+  
+  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b){
+    $ang = 180 * ($count - 2);
+    $r = 180 - ($ang / $count);
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+      for($c = 0; $c <= 360; $c+=$r){
+        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
+        $y = $center->getY();
+        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
+         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
+        $world->addParticle(new DustParticle($vec, $r, $g, $b));
+      }
+    }
+  }
+  
+  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name){
+    $ang = 180 * ($count - 2);
+    $r = 180 - ($ang / $count);
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+      for($c = 0; $c <= 360; $c+=$r){
+        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
+        $y = $center->getY();
+        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
+        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
         $pk->particleName = $name;
         $pk->position = $vec;
         $world->broadcastGlobalPacket($pk);
