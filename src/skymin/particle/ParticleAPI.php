@@ -54,7 +54,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $level, int $r, int $g, int $b){
+  public function colorstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, int $r, int $g, int $b){
     $x = $vec_1->getX() - $vec_2->getX();
     $y = $vec_1->getY() - $vec_2->getY();
     $z = $vec_1->getZ() - $vec_2->getZ();
@@ -69,11 +69,11 @@ class ParticleAPI extends PluginBase implements Listener{
       $y1 = $vec_1->getY() - $i * (-\sin($pitch / 180 * M_PI));
       $z1 = $vec_1->getZ() - $i * (\cos($yaw / 180 * M_PI));
       $vec = new Vector3($x1, $y1, $z1);
-      $level->addParticle(new DustParticle($vec, $r, $g, $b));
+      $world->addParticle(new DustParticle($vec, $r, $g, $b));
     }
   }
   
-  public function mcstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $level, string $name){
+  public function mcstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, string $name){
     $x = $vec_1->getX() - $vec_2->getX();
     $y = $vec_1->getY() - $vec_2->getY();
     $z = $vec_1->getZ() - $vec_2->getZ();
@@ -95,7 +95,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $level, int $r, int $g, int $b){
+  public function colorregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, int $r, int $g, int $b){
     $vec = $center;
     $ang = 180 * ($side - 2);
     $r = 180 - ($ang / $side);
@@ -109,12 +109,12 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->colorstraight($vec_1, $vec_2, $unit, $level, $r, $g, $b);
+        $this->colorstraight($vec_1, $vec_2, $unit, $world, $r, $g, $b);
       }
     }
   }
   
-  public function mcregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $level, string $name){
+  public function mcregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, string $name){
     $vec = $center;
     $ang = 180 * ($side - 2);
     $r = 180 - ($ang / $side);
@@ -128,7 +128,7 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->mcstraight($vec_1, $vec_2, $unit, $level, $name);
+        $this->mcstraight($vec_1, $vec_2, $unit, $world, $name);
       }
     }
   }
