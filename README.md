@@ -30,14 +30,14 @@ use skymin\particle\ParticleAPI;
 RGB색으로 된 원을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorcircle($center, $radius, $unit, $world, $r, $g, $b)
+ParticleAPI::getInstance()->colorcircle($center, $radius, $unit, $world, $r, $g, $b);
 ```
 </br>
 
 마인크래프트 기본 파티클로 원을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mccircle($center, $radius, $unit, $world, $name)
+ParticleAPI::getInstance()->mccircle($center, $radius, $unit, $world, $name);
 ```
 
 RGB색으로 직선을 구현합니다.
