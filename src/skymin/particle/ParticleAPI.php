@@ -109,7 +109,7 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->straightParticle($vec_1, $vec_2, $unit, $level, $r, $g, $b);
+        $this->colorstraight($vec_1, $vec_2, $unit, $level, $r, $g, $b);
       }
     }
   }
@@ -128,7 +128,7 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->mcparticlestraight($vec_1, $vec_2, $unit, $level, $name);
+        $this->mcstraight($vec_1, $vec_2, $unit, $level, $name);
       }
     }
   }
