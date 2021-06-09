@@ -36,3 +36,9 @@ ParticleAPI::getInstance()->colorcircle($center, $radius, $unit, $world, $r, $g,
 ```php
 ParticleAPI::getInstance()->mcparticlecircle($center, $radius, $unit, $world, $name);
 ```
+
+## 마인크래프트 파티클 목록
+
+참고사이트
+
+https://www.digminecraft.com/lists/particle_list_pe.php
