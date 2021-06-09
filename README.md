@@ -58,13 +58,13 @@ ParticleAPI::getInstance()->mcstraight($vec_1, $vec_2, $unit, $level, $name);
 RGB색으로 다각형을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorregular($center, $side, $radius, $length, $unit, $rotation, $level, $r, $g, $b);
+ParticleAPI::getInstance()->colorregular($center, $side, $radius, $length, $unit, $rotation, $world, $r, $g, $b);
 ```
 
 마인크래프트 기본 파티클로 다각형을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcregular($center, $side, $radius, $length, $unit, $rotation, $level, $name);
+ParticleAPI::getInstance()->mcregular($center, $side, $radius, $length, $unit, $rotation, $world, $name);
 ```
 
 RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치로 나오는 파티클을 구현합니다.
