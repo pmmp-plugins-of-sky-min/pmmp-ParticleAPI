@@ -162,7 +162,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorcircle(Vector3 $center, float $radius, float $height, float $unit, Level $world, int $r, int $g, int $b){
+  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, Level $world, int $r, int $g, int $b){
     for($i = 0; $i < 360; $i += $unit){
       for($h = 0; $h < $height; $h += unit){
         $x = $center->getX();
@@ -174,7 +174,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorcircle(Vector3 $center, float $radius, float $height, float $unit, Level $world, string $name){
+  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, Level $world, string $name){
     for($i = 0; $i < 360; $i += $unit){
       for($h = 0; $h < $height; $h += unit){
         $x = $center->getX();
@@ -189,7 +189,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturn(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b){
+  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b){
     $angle = 180 * ($count - 2);
     $r = 180 - ($angle / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
@@ -203,7 +203,7 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturn(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name){
+  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name){
     $angle = 180 * ($count - 2);
     $r = 180 - ($angle / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
