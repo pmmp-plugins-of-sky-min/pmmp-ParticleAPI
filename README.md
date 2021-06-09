@@ -18,7 +18,7 @@ $name : 마인크래프트 파티클 이름
 
 $r, $g, $b = RGB색 (255까지 있음)
 
-count : 파티클 갯수
+$count : 파티클 갯수
 </br>
 </br>
 ## How to use
