@@ -212,6 +212,7 @@ class ParticleAPI extends PluginBase implements Listener{
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
         $world->broadcastGlobalPacket($pk);
@@ -242,6 +243,7 @@ class ParticleAPI extends PluginBase implements Listener{
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
+        $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
         $world->broadcastGlobalPacket($pk);
