@@ -164,7 +164,7 @@ class ParticleAPI extends PluginBase implements Listener{
   
   public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle, Level $world, int $r, int $g, int $b){
     for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += unit){
+      for($h = 0; $h < $height; $h += $unit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
@@ -176,7 +176,7 @@ class ParticleAPI extends PluginBase implements Listener{
   
   public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle,Level $world, string $name){
     for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += unit){
+      for($h = 0; $h < $height; $h += $unit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
