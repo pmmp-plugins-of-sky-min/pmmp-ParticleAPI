@@ -51,7 +51,7 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->broadcastPackets($player, [$pk]);
     }
   }
   
@@ -94,7 +94,7 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->broadcastPackets($player, [$pk]);
     }
   }
   
@@ -163,7 +163,7 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->broadcastPackets($player, [$pk]);
     }
   }
   
@@ -192,7 +192,7 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->broadcastPackets($player, [$pk]);
     }
   }
   
@@ -253,7 +253,7 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->broadcastPackets($player, [$pk]);
     }
   }
   
@@ -281,7 +281,7 @@ class ParticleAPI extends PluginBase implements Listener{
         $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
+        $this->getServer()->broadcastPackets($player, [$pk]);
       }
     }
   }
@@ -314,7 +314,7 @@ class ParticleAPI extends PluginBase implements Listener{
         $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
+        $this->getServer()->broadcastPackets($player, [$pk]);
       }
     }
   }
@@ -347,7 +347,7 @@ class ParticleAPI extends PluginBase implements Listener{
         $pk = new SpawnParticleEffectPacket();
         $pk->particleName = $name;
         $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
+        $this->getServer()->broadcastPackets($player, [$pk]);
       }
     }
   }
