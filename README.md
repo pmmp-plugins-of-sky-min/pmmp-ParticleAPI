@@ -69,16 +69,40 @@ ParticleAPI::getInstance()->colorregular($center, $side, $radius, $length, $unit
 ParticleAPI::getInstance()->mcregular($center, $side, $radius, $length, $unit, $rotation, $world, $name, $player);
 ```
 
-RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치로 나오는 파티클을 구현합니다.
+RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorrand($center, $radius, $count, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorrandphrase($center, $radius, $count, $world, $r, $g, $b, $player);
 ```
 
-마인크래프트 기본 파티클로 범위내에 특정 갯수 만큼 랜덤 위치로 나오는 파티클을 구현합니다.
+마인크래프트 기본 파티클로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcrand($center, $radius, $count, $world, $name, $player);
+ParticleAPI::getInstance()->mcrandphrase($center, $radius, $count, $world, $name, $player);
+```
+
+RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
+
+```php
+ParticleAPI::getInstance()->colorrandcircle($center, $radius, $count, $world, $r, $g, $b, $player);
+```
+
+마인크래프트 기본 파티클로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
+
+```php
+ParticleAPI::getInstance()->mcrandcircle($center, $radius, $count, $world, $name, $player);
+```
+
+RGB색으로 두개 좌표 범위에 특정 갯수만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
+
+```php
+ParticleAPI::getInstance()->colorrandpos($vec_1, $vec_2, $count, $world, $r, $g, $b, $player);
+```
+
+마인크래프트 기본 파티클로 두개 좌표 범위에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
+
+```php
+ParticleAPI::getInstance()->mcrandpos($vec_1, $vec_2, $count, $world, $name, $player);
 ```
 
 RGB색으로 원기둥을 구현합니다.
