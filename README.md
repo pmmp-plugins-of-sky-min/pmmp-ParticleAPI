@@ -24,7 +24,7 @@ $height: 높이 (float)
 
 $angle : 그리기 시작각도 (int 0~360)
 
-$player : 플레이어 변수(Player)
+$player : 플레이어 변수 또는 배열(Player or array)
 </br>
 </br>
 ## How to use
