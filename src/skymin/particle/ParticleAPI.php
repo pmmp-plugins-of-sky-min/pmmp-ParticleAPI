@@ -8,7 +8,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\world\World;
 use pocketmine\World\particle\DustParticle;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 use pocketmine\math\Vector3;
 
