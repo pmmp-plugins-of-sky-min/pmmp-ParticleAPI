@@ -257,10 +257,10 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle, Level $world, int $r, int $g, int $b, $player){
+  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, int $angle, Level $world, int $r, int $g, int $b, $player){
     if(!is_array($player)) $player = [$player];
     for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += $unit){
+      for($h = 0; $h < $height; $h += $hunit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
@@ -270,10 +270,10 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, int $angle,Level $world, string $name, $player){
+  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, int $angle,Level $world, string $name, $player){
     if(!is_array($player)) $player = [$player];
     for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += $unit){
+      for($h = 0; $h < $height; $h += $hunit){
         $x = $center->getX();
         $y = $center->getY();
         $z = $center->getZ();
@@ -286,26 +286,26 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b, $player){
+  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, $player){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
     if(!is_array($player)) $player = [$player];
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
+        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
         $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
       }
     }
   }
   
-  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name, $player){
+  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, $player){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
     if(!is_array($player)) $player = [$player];
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
@@ -319,11 +319,11 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, int $r, int $g, int $b, $player){
+  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, $player){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
     if(!is_array($player)) $player = [$player];
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
@@ -334,11 +334,11 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, Level $world, string $name, $player){
+  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, $player){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
     if(!is_array($player)) $player = [$player];
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h=$h+$unit){
+    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
