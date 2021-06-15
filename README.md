@@ -110,37 +110,37 @@ ParticleAPI::getInstance()->mcrandpos($vec_1, $vec_2, $count, $world, $name, $pl
 RGB색으로 원기둥을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorpillar($center, $radius, $height, $unit, $angle, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorpillar($center, $radius, $height, $unit, $hunit, $angle, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 원기둥을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcpillar($center, $radius, $height, $unit, $angle, $world, $name, $player);
+ParticleAPI::getInstance()->mcpillar($center, $radius, $height, $unit, $hunit, $angle, $world, $name, $player);
 ```
 
 RGB색으로 올라가는 회오리를 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorturnup($center, $radius, $height, $count, $unit, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorturnup($center, $radius, $height, $count, $unit, $hunit, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 올라가는 회오리를 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcturnup($center, $radius, $height, $count, $unit, $world, $name, $player);
+ParticleAPI::getInstance()->mcturnup($center, $radius, $height, $count, $unit, $hunit, $world, $name, $player);
 ```
 
 RGB색으로 내려가는 회오리를 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorturndown($center, $radius, $height, $count, $unit, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorturndown($center, $radius, $height, $count, $unit, $hunit, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 내려가는 회오리를 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcturndown($center, $radius, $height, $count, $unit, $world, $name, $player);
+ParticleAPI::getInstance()->mcturndown($center, $radius, $height, $count, $unit, $hunit, $world, $name, $player);
 ```
 
 </br>
