@@ -29,6 +29,6 @@ class test extends PluginBase implements Listener{
     $radius = 3;
     $count = 70;
     $world = $p->getLevel();
-    ParticleAPI::getInstance()->mcturnup($center, 2, 10, 5, 1.5, 0.7, $world, 'minecraft:huge_explosion_emitter',  $p);
+    ParticleAPI::getInstance()->mcturnup($center, 2, 50, 5, 1.5, 5, $world, 'minecraft:huge_explosion_emitter',  $p);
   }
 }
