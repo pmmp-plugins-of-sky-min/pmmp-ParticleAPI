@@ -2,7 +2,7 @@
 
 $radius : 중앙 거리 (float)
 
-$unit : 파티클 간격 (float)
+$unit : 파티클 간격 각도 (float)
 
 $center, $vec_1, $vec_2 : 위치 (Vector)
 
@@ -21,6 +21,8 @@ $r, $g, $b = RGB색 (0~255)
 $count : 파티클 갯수 (int)
 
 $height: 높이 (float)
+
+$hunit : 파티클 높이 간격 (float)
 
 $angle : 그리기 시작각도 (int 0~360)
 
