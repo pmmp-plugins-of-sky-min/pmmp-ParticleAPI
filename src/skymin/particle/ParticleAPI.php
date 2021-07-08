@@ -19,8 +19,8 @@ use skymin\particle\task\ColorCircleTask;
 use skymin\particle\task\McCircleTask;
 use skymin\particle\task\ColorStraightTask;
 use skymin\particle\task\McStraightTask;
-//use skymin\particle\task\ColorTurnTask;
-//use skymin\particle\task\McTurnTask;
+use skymin\particle\task\ColorTurnTask;
+use skymin\particle\task\McTurnTask;
 
 class ParticleAPI extends PluginBase implements Listener{
   
@@ -307,66 +307,54 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, array $players){
-    $ang = 180 * ($count - 2);
-    $ri = 180 - ($ang / $count);
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$ri){
-        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
-        $y = $center->getY();
-        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
-        $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+  public function colorTurn(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, string $type, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    $angle = 360/$count;
+    if($delay === 0){
+      if($type === 'up'){
+        for($h = 0, $a = 0; $h < $height; $h += $hunit, $a += $unit){
+          $vec = new Vector3($x, $y + $h, $z);
+          $this->colorCircle($vec, $radius, $angle, $a, $world, $r, $g, $b, 0, $players);
+        }
+        return;
       }
+      if($type === 'down'){
+        for($h = 0, $a = 0; $h < $height; $h += $hunit, $a += $unit){
+          $vec = new Vector3($x, $y - $h, $z);
+          $this->colorCircle($vec, $radius, $angle, $a, $world, $r, $g, $b, 0, $players);
+        }
+        return;
+      }
+      return;
     }
+    $this->getScheduler()->ScheduleRepeatingTask(new ColorTurnTask($center, $radius, $height, $count, $unit, $hunit, $world, $r, $g, $b, $type, $players), $delay);
   }
   
-  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, array $players){
-    $ang = 180 * ($count - 2);
-    $r = 180 - ($ang / $count);
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$r){
-        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
-        $y = $center->getY();
-        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y + $h, $z + cos(deg2rad($i)) * $radius);
-        $pk = new SpawnParticleEffectPacket();
-        $pk->particleName = $name;
-        $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
+  public function mcTurn(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, string $type, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    $angle = 360/$count;
+    if($delay === 0){
+      if($type === 'up'){
+        for($h = 0, $a = 0; $h < $height; $h += $hunit, $a += $unit){
+          $vec = new Vector3($x, $y + $h, $z);
+          $this->mcCircle($vec, $radius, $angle, $a, $world, $name, 0, $players, $delay);
+        }
+        return;
       }
-    }
-  }
-  
-  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, array $players){
-    $ang = 180 * ($count - 2);
-    $ri = 180 - ($ang / $count);
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$ri){
-        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
-        $y = $center->getY();
-        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
-        $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+      if($type === 'down'){
+        for($h = 0, $a = 0; $h < $height; $h += $hunit, $a += $unit){
+          $vec = new Vector3($x, $y - $h, $z);
+          $this->mcCircle($vec, $radius, $angle, $a, $world, $name, 0, $players, $delay);
+        }
+        return;
       }
+      return;
     }
-  }
-  
-  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, array $players){
-    $ang = 180 * ($count - 2);
-    $r = 180 - ($ang / $count);
-    for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$r){
-        $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
-        $y = $center->getY();
-        $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
-        $pk = new SpawnParticleEffectPacket();
-        $pk->particleName = $name;
-        $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
-      }
-    }
+    $this->getScheduler()->ScheduleRepeatingTask(new McTurnTask($center, $radius, $height, $count, $unit, $hunit, $world, $name, $type, $players), $delay);
   }
   
   public function closeTask(int $id){
