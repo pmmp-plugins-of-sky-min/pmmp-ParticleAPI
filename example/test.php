@@ -25,10 +25,11 @@ class test extends PluginBase implements Listener{
   
   public function onJoin(PlayerInteractEvent $ev){
     $p = $ev->getPlayer();
-    $center = $p->getPosition();
-    $radius = 3;
+    $vec_1 = $p->getPosition();
+    $vec_2 = $ev->getTouchVector();
+    $unit = 0.7;
     $count = 70;
     $world = $p->getLevel();
-    ParticleAPI::getInstance()->mcturnup($center, 2, 50, 5, 1.5, 5, $world, 'minecraft:huge_explosion_emitter',  $p);
+    ParticleAPI::getInstance()->colorstraight($vec_1, $vec_2, $unit, $world, 3, 200, 70, [$p], 2);
   }
 }
