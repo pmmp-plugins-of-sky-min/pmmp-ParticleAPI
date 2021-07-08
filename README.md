@@ -31,6 +31,8 @@ $dir : 원 그려지는 방향 (0 or 1)
 $player : 플레이어 변수 또는 배열(Player array)
 
 $delay : Tick (딜레이가 필요 없다면 이 변수는 입력할 필요가 없습니다)
+
+$type: "up" or "down"
 </br>
 </br>
 ## How to use
