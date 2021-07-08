@@ -26,7 +26,11 @@ $hunit : 파티클 높이 간격 (float)
 
 $angle : 그리기 시작각도 (int 0~360)
 
-$player : 플레이어 변수 또는 배열(Player or array)
+$dir : 원 그려지는 방향 (0 or 1)
+
+$player : 플레이어 변수 또는 배열(Player array)
+
+$delay : Tick (딜레이가 필요 없다면 이 변수는 입력할 필요가 없습니다)
 </br>
 </br>
 ## How to use
@@ -38,73 +42,73 @@ use skymin\particle\ParticleAPI;
 RGB색으로 된 원을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorcircle($center, $radius, $unit, $angle, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorCircle($center, $radius, $unit, $angle, $world, $r, $g, $b, $dir, $players, $delay);
 ```
 
 마인크래프트 기본 파티클로 원을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mccircle($center, $radius, $unit, $angle, $world, $name, $player);
+ParticleAPI::getInstance()->mcCircle($center, $radius, $unit, $angle, $world, $name, $dir, $players, $delay);
 ```
 
 RGB색으로 직선을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorstraight($vec_1, $vec_2, $unit, $level, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorStraight($vec_1, $vec_2, $unit, $level, $r, $g, $b, $player, $delay);
 ```
 
 마인크래프트 기본 파티클로 직선을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcstraight($vec_1, $vec_2, $unit, $level, $name, $player);
+ParticleAPI::getInstance()->mcStraight($vec_1, $vec_2, $unit, $level, $name, $player,  $delay);
 ```
 
 RGB색으로 다각형을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorregular($center, $side, $radius, $length, $unit, $rotation, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorRegular($center, $side, $radius, $length, $unit, $rotation, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 다각형을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcregular($center, $side, $radius, $length, $unit, $rotation, $world, $name, $player);
+ParticleAPI::getInstance()->mcRegular($center, $side, $radius, $length, $unit, $rotation, $world, $name, $player);
 ```
 
 RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorrandphrase($center, $radius, $count, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorRandXYZ($center, $radius, $count, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcrandphrase($center, $radius, $count, $world, $name, $player);
+ParticleAPI::getInstance()->mcRandXYZ($center, $radius, $count, $world, $name, $player);
 ```
 
 RGB색으로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorrandcircle($center, $radius, $count, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorRandXZ($center, $radius, $count, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 범위내에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcrandcircle($center, $radius, $count, $world, $name, $player);
+ParticleAPI::getInstance()->mcRandXZ($center, $radius, $count, $world, $name, $player);
 ```
 
 RGB색으로 두개 좌표 범위에 특정 갯수만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->colorrandpos($vec_1, $vec_2, $count, $world, $r, $g, $b, $player);
+ParticleAPI::getInstance()->colorRandPos($vec_1, $vec_2, $count, $world, $r, $g, $b, $player);
 ```
 
 마인크래프트 기본 파티클로 두개 좌표 범위에 특정 갯수 만큼 랜덤 위치(y좌표 미포함)로 나오는 파티클을 구현합니다.
 
 ```php
-ParticleAPI::getInstance()->mcrandpos($vec_1, $vec_2, $count, $world, $name, $player);
+ParticleAPI::getInstance()->mcRandPos($vec_1, $vec_2, $count, $world, $name, $player);
 ```
 
 RGB색으로 원기둥을 구현합니다.
