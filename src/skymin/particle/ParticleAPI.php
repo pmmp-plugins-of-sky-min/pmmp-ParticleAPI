@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace skymin\particle;
 
@@ -13,6 +14,13 @@ use pocketmine\Player;
 use pocketmine\math\Vector3;
 
 use pocketmine\network\mcpe\protocol\SpawnParticleEffectPacket;
+
+use skymin\particle\task\ColorCircleTask;
+use skymin\particle\task\McCircleTask;
+use skymin\particle\task\ColorStraightTask;
+use skymin\particle\task\McStraightTask;
+//use skymin\particle\task\ColorTurnTask;
+//use skymin\particle\task\McTurnTask;
 
 class ParticleAPI extends PluginBase implements Listener{
   
@@ -30,33 +38,54 @@ class ParticleAPI extends PluginBase implements Listener{
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
   }
   
-  public function colorcircle(Vector3 $center, float $radius, float $unit, int $angle, Level $world, int $r, int $g, int $b, $player){
-    if(!is_array($player)) $player = [$player];
-    for($i = 0; $i < 360; $i += $unit){
-      $x = $center->getX();
-      $y = $center->getY();
-      $z = $center->getZ();
-      $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
-      $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+  public function colorCircle(Vector3 $center, float $radius, float $unit, float $angle, Level $world, int $r, int $g, int $b, int $dir, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    if($delay === 0){
+      if($dir === 0){
+        for($i = 0; $i < 360; $i += $unit){
+          $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
+          $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
+        }
+        return;
+      }
+      for($i = 0; $i < 360; $i += $unit){
+        $vec = new Vector3($x + sin(deg2rad((360-$i) + $angle)) * $radius, $y, $z + cos(deg2rad((360-$i) + $angle)) * $radius);
+        $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
+      }
     }
+    $this->getScheduler()->scheduleRepeatingTask(new ColorCircleTask($center, $radius, $unit, $angle, $world, $r, $g, $b, $dir, $players), $delay);
   }
   
-  public function mccircle(Vector3 $center, float $radius, float $unit, int $angle, Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
-    for($i = 0; $i < 360; $i += $unit){
-      $x = $center->getX();
-      $y = $center->getY();
-      $z = $center->getZ();
-      $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
-      $pk = new SpawnParticleEffectPacket();
-      $pk->particleName = $name;
-      $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+  public function mcCircle(Vector3 $center, float $radius, float $unit, float $angle, Level $world, string $name, int $dir, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    if($delay === 0){
+      if($dir === 0){
+        for($i = 0; $i < 360; $i += $unit){
+          $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y, $z + cos(deg2rad($i + $angle)) * $radius);
+          $pk = new SpawnParticleEffectPacket();
+          $pk->particleName = $name;
+          $pk->position = $vec;
+          $this->getServer()->batchPackets($players, [$pk], false);
+        }
+        return;
+      }
+      for($i = 0; $i < 360; $i += $unit){
+        $vec = new Vector3($x + sin(deg2rad((360 - $i) + $angle)) * $radius, $y, $z + cos(deg2rad((360 - $i) + $angle)) * $radius);
+        $pk = new SpawnParticleEffectPacket();
+        $pk->particleName = $name;
+        $pk->position = $vec;
+        $this->getServer()->batchPackets($players, [$pk], false);
+      }
+      return;
     }
+    $this->getScheduler()->scheduleRepeatingTask(new McCircleTask($center, $radius, $unit, $angle, $world, $name, $dir, $players), $delay);
   }
   
-  public function colorstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, int $r, int $g, int $b,$player){
-    if(!is_array($player)) $player = [$player];
+  public function colorStraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, int $r, int $g, int $b, array $players, int $delay = 0):void{
     $x = $vec_1->getX() - $vec_2->getX();
     $y = $vec_1->getY() - $vec_2->getY();
     $z = $vec_1->getZ() - $vec_2->getZ();
@@ -65,18 +94,21 @@ class ParticleAPI extends PluginBase implements Listener{
     $yaw = rad2deg(atan2(-$x, $z));
     $pitch = rad2deg(- atan2($y, $xz_modulus));
     $distance = $vec_1->distance($vec_2);
-    for($i = 0; $i <= $distance; $i += $unit){
-      $vec = $vec_1;
-      $x1 = $vec_1->getX() - $i * (-\sin($yaw / 180 * M_PI));
-      $y1 = $vec_1->getY() - $i * (-\sin($pitch / 180 * M_PI));
-      $z1 = $vec_1->getZ() - $i * (\cos($yaw / 180 * M_PI));
-      $vec = new Vector3($x1, $y1, $z1);
-      $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+    if($delay = 0){
+      for($i = 0; $i <= $distance; $i += $unit){
+        $vec = $vec_1;
+        $x1 = $vec_1->getX() - $i * (-\sin($yaw / 180 * M_PI));
+        $y1 = $vec_1->getY() - $i * (-\sin($pitch / 180 * M_PI));
+        $z1 = $vec_1->getZ() - $i * (\cos($yaw / 180 * M_PI));
+        $vec = new Vector3($x1, $y1, $z1);
+        $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
+      }
+      return;
     }
+    $this->getScheduler()->scheduleRepeatingTask(new ColorStraightTask($vec_1, $vec_2, $unit, $world, $r, $g, $b, $players), $delay);
   }
   
-  public function mcstraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
+  public function mcStraight(Vector3 $vec_1, Vector3 $vec_2, float $unit, Level $world, string $name, array $players, int $delay = 0):void{
     $x = $vec_1->getX() - $vec_2->getX();
     $y = $vec_1->getY() - $vec_2->getY();
     $z = $vec_1->getZ() - $vec_2->getZ();
@@ -85,20 +117,24 @@ class ParticleAPI extends PluginBase implements Listener{
     $yaw = rad2deg(atan2(-$x, $z));
     $pitch = rad2deg(- atan2($y, $xz_modulus));
     $distance = $vec_1->distance($vec_2);
-    for($i = 0; $i <= $distance; $i += $unit){
-      $vec = $vec_1;
-      $x1 = $vec_1->getX() - $i * (-\sin($yaw / 180 * M_PI));
-      $y1 = $vec_1->getY() - $i * (-\sin($pitch / 180 * M_PI));
-      $z1 = $vec_1->getZ() - $i * (\cos($yaw / 180 * M_PI));
-      $vec = new Vector3($x1, $y1, $z1);
-      $pk = new SpawnParticleEffectPacket();
-      $pk->particleName = $name;
-      $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+    if($delay = 0){
+      for($i = 0; $i <= $distance; $i += $unit){
+        $vec = $vec_1;
+        $x1 = $vec_1->getX() - $i * (-\sin($yaw / 180 * M_PI));
+        $y1 = $vec_1->getY() - $i * (-\sin($pitch / 180 * M_PI));
+        $z1 = $vec_1->getZ() - $i * (\cos($yaw / 180 * M_PI));
+        $vec = new Vector3($x1, $y1, $z1);
+        $pk = new SpawnParticleEffectPacket();
+        $pk->particleName = $name;
+        $pk->position = $vec;
+        $this->getServer()->batchPackets($players, [$pk], false);
+      }
+      return;
     }
+    $this->getScheduler()->scheduleRepeatingTask(new McStraightTask($vec_1, $vec_2, $unit, $world, $name, $players), $delay);
   }
   
-  public function colorregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, int $r, int $g, int $b, $player){
+  public function colorRegular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, int $r, int $g, int $b, array $players):void{
     $vec = $center;
     $ang = 180 * ($side - 2);
     $r = 180 - ($ang / $side);
@@ -112,12 +148,12 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->colorstraight($vec_1, $vec_2, $unit, $world, $r, $g, $b, $player);
+        $this->colorstraight($vec_1, $vec_2, $unit, $world, $r, $g, $b, $players);
       }
     }
   }
   
-  public function mcregular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, string $name, $player){
+  public function mcRegular(Vector3 $center, int $side, float $radius, float $length, float $unit, float $rotation, Level $world, string $name, array $players):void{
     $vec = $center;
     $ang = 180 * ($side - 2);
     $r = 180 - ($ang / $side);
@@ -131,13 +167,12 @@ class ParticleAPI extends PluginBase implements Listener{
       if($i !== $rotation){
         $vec_1 = new Vector3($x1, $y1, $z1);
         $vec_2 = new Vector3($x2, $y2, $z2);
-        $this->mcstraight($vec_1, $vec_2, $unit, $world, $name, $player);
+        $this->mcstraight($vec_1, $vec_2, $unit, $world, $name, $players);
       }
     }
   }
   
-  public function colorrandphrase(Vector3 $center, float $radius, int $count, Level $world, int $r, int $g, int $b, $player){
-    if(!is_array($player)) $player = [$player];
+  public function colorRandXYZ(Vector3 $center, float $radius, int $count, Level $world, int $r, int $g, int $b, array $players):void{
     for($i = 0; $i<=$count; $i++){
       $addx = mt_rand(-$radius *100, $radius * 100)/100;
       $addy = mt_rand(-$radius *100, $radius * 100)/100;
@@ -146,12 +181,11 @@ class ParticleAPI extends PluginBase implements Listener{
       $y = $center->getY();
       $z = $center->getZ();
       $vec = new Vector3($x + $addx, $y + $addy, $z + $addz);
-      $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+      $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
     }
   }
   
-  public function mcrandphrase(Vector3 $center, float $radius, int $count, Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
+  public function mcRandXYZ(Vector3 $center, float $radius, int $count, Level $world, string $name, array $players):void{
     for($i = 0; $i<=$count; $i++){
       $addx = mt_rand(-$radius *100, $radius * 100)/100;
       $addy = mt_rand(-$radius *100, $radius * 100)/100;
@@ -163,12 +197,11 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->batchPackets($players, [$pk], false);
     }
   }
   
-  public function colorrandcircle(Vector3 $center, float $radius, int $count, Level $world, int $r, int $g, int $b, $player){
-    if(!is_array($player)) $player = [$player];
+  public function colorRandXZ(Vector3 $center, float $radius, int $count, Level $world, int $r, int $g, int $b, array $players, int $delay = 0):void{
     for($i = 0; $i<=$count; $i++){
       $addx = mt_rand(-$radius *100, $radius * 100)/100;
       $addz = mt_rand(-$radius *100, $radius * 100)/100;
@@ -176,12 +209,11 @@ class ParticleAPI extends PluginBase implements Listener{
       $y = $center->getY();
       $z = $center->getZ();
       $vec = new Vector3($x + $addx, $y, $z + $addz);
-      $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+      $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
     }
   }
   
-  public function mcrandcircle(Vector3 $center, float $radius, int $count, Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
+  public function mcRandXZ(Vector3 $center, float $radius, int $count, Level $world, string $name, array $players, int $delay = 0):void{
     for($i = 0; $i<=$count; $i++){
       $addx = mt_rand(-$radius *100, $radius * 100)/100;
       $addz = mt_rand(-$radius *100, $radius * 100)/100;
@@ -192,12 +224,11 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->batchPackets($players, [$pk], false);
     }
   }
   
-  public function colorrandpos(Vector3 $vec_1, Vector3 $vec_2, float $radius, int $count, Level $world, int $r, int $g, int $b, $player){
-    if(!is_array($player)) $player = [$player];
+  public function colorRandPos(Vector3 $vec_1, Vector3 $vec_2, float $radius, int $count, Level $world, int $r, int $g, int $b, array $players, int $delay = 0):void{
     $x1 = $vec_1->getX();
     $y1 = $vec_1->getY();
     $z1 = $vec_1->getZ();
@@ -221,12 +252,11 @@ class ParticleAPI extends PluginBase implements Listener{
         $z = mt_rand($z1, $z2);
       }
       $vec = new Vector3($x, $y, $z);
-      $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
+      $world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
     }
   }
   
-  public function mcrandpos(Vector3 $vec_1, Vector3 $vec_2,  int $count, Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
+  public function mcRandPos(Vector3 $vec_1, Vector3 $vec_2,  int $count, Level $world, string $name, array $players, int $delay = 0):void{
     $x1 = $vec_1->getX();
     $y1 = $vec_1->getY();
     $z1 = $vec_1->getZ();
@@ -253,45 +283,35 @@ class ParticleAPI extends PluginBase implements Listener{
       $pk = new SpawnParticleEffectPacket();
       $pk->particleName = $name;
       $pk->position = $vec;
-      $this->getServer()->batchPackets($player, [$pk], false);
+      $this->getServer()->batchPackets($players, [$pk], false);
     }
   }
   
-  public function colorpillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, int $angle, Level $world, int $r, int $g, int $b, $player){
-    if(!is_array($player)) $player = [$player];
-    for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += $hunit){
-        $x = $center->getX();
-        $y = $center->getY();
-        $z = $center->getZ();
-        $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y + $h, $z + cos(deg2rad($i + $angle)) * $radius);
-        $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
-      }
+  public function colorPillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, float $angle, Level $world, int $r, int $g, int $b, int $dir, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    for($i = 0; $i < $height; $i += $hunit){
+      $vec = new Vector3($x, $y + $i, $z);
+      $this->colorCircle($vec, $radius, $unit, $angle, $world, $r, $g, $b, $dir, $players, $delay);
     }
   }
   
-  public function mcpillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, int $angle,Level $world, string $name, $player){
-    if(!is_array($player)) $player = [$player];
-    for($i = 0; $i < 360; $i += $unit){
-      for($h = 0; $h < $height; $h += $hunit){
-        $x = $center->getX();
-        $y = $center->getY();
-        $z = $center->getZ();
-        $vec = new Vector3($x + sin(deg2rad($i + $angle)) * $radius, $y + $h, $z + cos(deg2rad($i + $angle)) * $radius);
-        $pk = new SpawnParticleEffectPacket();
-        $pk->particleName = $name;
-        $pk->position = $vec;
-        $this->getServer()->batchPackets($player, [$pk], false);
-      }
+  public function mcPillar(Vector3 $center, float $radius, float $height, float $unit, float $hunit, float $angle, Level $world, string $name, int $dir, array $players, int $delay = 0):void{
+    $x = $center->getX();
+    $y = $center->getY();
+    $z = $center->getZ();
+    for($i = 0; $i < $height; $i += $hunit){
+      $vec = new Vector3($x, $y + $i, $z);
+      $this->colorCircle($vec, $radius, $unit, $angle, $world, $name, $dir, $players, $delay);
     }
   }
   
-  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, $player){
+  public function colorturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, array $players){
     $ang = 180 * ($count - 2);
-    $r = 180 - ($ang / $count);
-    if(!is_array($player)) $player = [$player];
+    $ri = 180 - ($ang / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$r){
+      for($c = 0; $c <= 360; $c+=$ri){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
@@ -301,10 +321,9 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, $player){
+  public function mcturnup(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, array $players){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
-    if(!is_array($player)) $player = [$player];
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
@@ -319,25 +338,23 @@ class ParticleAPI extends PluginBase implements Listener{
     }
   }
   
-  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, $player){
+  public function colorturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, int $r, int $g, int $b, array $players){
     $ang = 180 * ($count - 2);
-    $r = 180 - ($ang / $count);
-    if(!is_array($player)) $player = [$player];
+    $ri = 180 - ($ang / $count);
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
-      for($c = 0; $c <= 360; $c+=$r){
+      for($c = 0; $c <= 360; $c+=$ri){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
         $y = $center->getY();
         $z = $center->getZ() + $radius * (\cos($c / 180 * M_PI));
-         $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
+        $vec = new Vector3($x + sin(deg2rad($i)) * $radius, $y - $h, $z + cos(deg2rad($i)) * $radius);
         $world->addParticle(new DustParticle($vec, $r, $g, $b), $player);
       }
     }
   }
   
-  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, $player){
+  public function mcturndown(Vector3 $center, float $radius, float $height, int $count, float $unit, float $hunit, Level $world, string $name, array $players){
     $ang = 180 * ($count - 2);
     $r = 180 - ($ang / $count);
-    if(!is_array($player)) $player = [$player];
     for($i = 0, $h = 0; $h<$height; $i=$i+$unit*$height, $h += $hunit){
       for($c = 0; $c <= 360; $c+=$r){
         $x = $center->getX() + $radius * (-\sin($c / 180 * M_PI));
@@ -350,5 +367,9 @@ class ParticleAPI extends PluginBase implements Listener{
         $this->getServer()->batchPackets($player, [$pk], false);
       }
     }
+  }
+  
+  public function closeTask(int $id){
+    $this->getScheduler()->cancelTask($id);
   }
 }
