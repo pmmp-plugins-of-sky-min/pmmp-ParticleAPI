@@ -57,6 +57,7 @@ class ParticleAPI extends PluginBase implements Listener{
 				$vec = new Vector3($x + sin(deg2rad((360 - $i) + $angle)) * $radius, $y, $z + cos(deg2rad((360 - $i) + $angle)) * $radius);
 				$world->addParticle(new DustParticle($vec, $r, $g, $b), $players);
 			}
+			return;
 		}
 		$this->getScheduler()->scheduleRepeatingTask(new ColorCircleTask($center, $radius, $unit, $angle, $world, $r, $g, $b, $dir, $players), $delay);
 	}
