@@ -37,7 +37,9 @@ $type: "up" or "down"
 </br>
 ## How to use
 
+```php
 use skymin\particle\ParticleAPI;
+```
 </br>
 </br>
 
