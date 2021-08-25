@@ -26,9 +26,9 @@ use function sqrt;
 
 class ParticleAPI extends PluginBase implements Listener{
 
-	public static ParticleAPI $instance;
+	private static ?ParticleAPI $instance = null;
 
-	public static function getInstance() : ParticleAPI{
+	public static function getInstance() : ?ParticleAPI{
 		return self::$instance;
 	}
 
